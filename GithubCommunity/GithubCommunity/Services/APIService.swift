@@ -10,8 +10,13 @@ enum APIMethod: String {
     case get = "GET", post = "POST"
 }
 
+protocol APIServiceProtocol {
+    var session: URLSession { get }
+    func sendRequest<T: Decodable>(url: URL, method: APIMethod, body: Data?, queries: [String: String]?) async -> Result<T, Error>
+}
 
-class APIService {
+class APIService: APIServiceProtocol {
+    var session: URLSession = .shared
     
     func sendRequest<T: Decodable>(url: URL, method: APIMethod, body: Data? = nil, queries: [String: String]? = nil) async -> Result<T, Error> {
         // Compose request via url components
@@ -37,12 +42,11 @@ class APIService {
 //        request.httpBody = try body()?
         
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await session.data(for: request)
             
             // For response checking only
             data.prettyPrint()
             
-            /// Decode the JSON response into the PostResponse struct.
             let decodedResponse = try JSONDecoder().decode(T.self, from: data)
             
             return .success(decodedResponse)
@@ -52,6 +56,4 @@ class APIService {
         }
     
     }
-    
- 
 }

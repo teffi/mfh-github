@@ -9,9 +9,18 @@ import SwiftUI
 
 @main
 struct GitHubCommunityApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            UsersListView()
+            NavigationStack {
+                UsersView()
+            }
+            
         }
     }
+}
+
+
+extension EnvironmentValues {
+  @Entry var apiService = APIService()
 }

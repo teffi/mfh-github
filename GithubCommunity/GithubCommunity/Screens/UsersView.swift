@@ -27,7 +27,6 @@ struct UsersListView: View {
                     .tint(.gray)
             }
         }
-        
         .onAppear(perform: viewModel.viewAppeared)
         
     }

@@ -21,11 +21,8 @@ struct UsersView: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 24) {
                         ForEach(viewModel.users) { user in
-//                            UserPreview(repositoryService: RepositoryService(), routerService: viewModel.routerService)
-
-                            
                             Button{
-                                //viewModel.goToUser()
+                                viewModel.goToUser()
                             } label: {
                             
                                 HStack(spacing: 14) {

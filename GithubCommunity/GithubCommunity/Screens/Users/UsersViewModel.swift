@@ -44,35 +44,35 @@ class UsersViewModel: ObservableObject {
         print("view appeared")
     }
     
+    /// Retrieve list of users and each user's profile.
     func getUsers() {
         Task {
             isLoading = true
             defer { isLoading = false }
             
             do {
-                users = try await withThrowingTaskGroup(of: UserProfile.self, returning: [UserProfile].self) { group in
+                users = try await withThrowingTaskGroup(of: (offset: Int, value: UserProfile).self, returning: [UserProfile].self) { group in
                     // Get all users
                     let userUrls = try await self.repositoryService.getUsers().map { $0.url }
-
-                    // Get profile per user
-                    for url in userUrls {
-                        //Return user profile per user url.
+                    
+                    // Store user profile in tuple with original index
+                    for (idx, url) in userUrls.enumerated() {
                         group.addTask {
-                            try await self.repositoryService.getUser(link: url)
+                            (idx, try await self.repositoryService.getUser(link: url))
                         }
                     }
                     
-                    return try await group.reduce(into: [UserProfile]()) { partialResult, profile in
-                        partialResult.append(profile)
+                    var result = [(offset: Int, value: UserProfile)]()
+                    while let next = try await group.next() {
+                        result.append(next)
                     }
-                    
+                    // Return sorted profiles
+                    return result.sorted{ $0.offset < $1.offset }.map{ $0.value }
                 }
             } catch {
                 print(error)
             }
-           
         }
-        
     }
     
     func goToUser() {

@@ -18,8 +18,8 @@ struct RootView: View {
                     switch route {
                     case .repo(let restUrl):
                         RepoView()
-                    case .user(let restUrl):
-                        UserView()
+                    case .userProfile(let profile):
+                        UserView(user: profile, repositoryService: RepositoryService(), routerService: router)
                     case .users:
                         UsersView(repositoryService: RepositoryService(), routerService: router)
                     }

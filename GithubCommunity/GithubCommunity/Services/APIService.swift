@@ -33,13 +33,8 @@ class APIService: APIServiceProtocol {
         request.httpMethod = method.rawValue
         request.allHTTPHeaderFields = [
             "Content-Type" : "application/vnd.github+json"
-        ]
-        
-//        request.allHTTPHeaderFields = [
-//            "Content-Type" : "application/vnd.github+json",
-//            "Authentication": "Bearer " + "YOUR_GITHUB_TOKEN" //TODO: Replace token here
-//        ]
-//        request.httpBody = try body()?
+        ]        
+        request.httpBody = body
         
         let (data, response) = try await session.data(for: request)
         

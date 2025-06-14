@@ -16,8 +16,7 @@ struct AvatarView: View {
                 .aspectRatio(contentMode: .fill)
         } placeholder: {
             Image(systemName: "photo.fill")
-        }
-        .frame(width: 80, height: 80)
+        }     
         .clipShape(Circle())
     }
 }

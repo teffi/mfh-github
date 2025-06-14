@@ -16,13 +16,15 @@ struct User: Identifiable, Decodable {
     let reposUrl: String
 }
 
-struct UserProfile: Identifiable, Decodable {
+struct UserProfile: Identifiable, Decodable, Hashable {
     let id: Int
     let name: String
     let login: String
     let avatarUrl: String
+    let location: String?
     let reposUrl: String
     let followers: Int
+    let following: Int
 }
 
 
@@ -75,8 +77,8 @@ class UsersViewModel: ObservableObject {
         }
     }
     
-    func goToUser() {
+    func goToUser(user: UserProfile) {
         print("go to user")
-        routerService.to(route: .user(restUrl: "sample link"))
+        routerService.to(route: .userProfile(user: user))
     }
 }

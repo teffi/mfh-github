@@ -11,6 +11,7 @@ protocol RepositoryServiceProtocol {
     
     func getUsers() async throws -> [User]
     func getUser(link: String) async throws -> UserProfile
+    func getRepositories(link: String) async throws -> [Repository]
 }
 
 class RepositoryService: RepositoryServiceProtocol {
@@ -21,6 +22,10 @@ class RepositoryService: RepositoryServiceProtocol {
     }
     
     func getUser(link: String) async throws -> UserProfile {
+        return try await APIService().sendRequest(url: URL(string: link)!, method: .get)
+    }
+    
+    func getRepositories(link: String) async throws -> [Repository] {
         return try await APIService().sendRequest(url: URL(string: link)!, method: .get)
     }
 }

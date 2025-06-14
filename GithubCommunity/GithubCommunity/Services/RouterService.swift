@@ -29,6 +29,6 @@ class RouterService: ObservableObject {
 
 enum AppRoute: Hashable {
     case users
-    case user(restUrl: String)
+    case userProfile(user: UserProfile)
     case repo(restUrl: String)
 }

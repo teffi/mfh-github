@@ -20,12 +20,29 @@ struct UsersView: View {
             VStack {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 24) {
+                        Text("Meet the GitHub Community")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding(.top, 20)
                         ForEach(viewModel.users) { user in
-                            HStack(spacing: 14) {
-                                AvatarView(url: URL(string: user.avatarUrl)!)
+                            VStack(alignment: .leading, spacing: 14) {
+                                HStack(alignment: .top){
+                                    AvatarView(url: URL(string: user.avatarUrl)!)
+                                        .frame(width: 80, height: 80)
+                                    Spacer()
+                                    if let location = user.location {
+                                        Label(location, systemImage: "mappin.and.ellipse")
+                                            .font(.footnote)
+                                    }
+                                }                                
                                 VStack(alignment: .leading, spacing: 8){
                                     Text(user.name)
+                                        .bold()
+                                        .font(.title2)
                                     Text("@\(user.login)")
+                                    HStack(spacing: 8) {
+                                        
+                                    }
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             }
@@ -34,7 +51,7 @@ struct UsersView: View {
                             .padding(.vertical, 20)
                             .card()
                             .onTapGesture {
-                                viewModel.goToUser()
+                                viewModel.goToUser(user: user)
                             }
                         }
                     }

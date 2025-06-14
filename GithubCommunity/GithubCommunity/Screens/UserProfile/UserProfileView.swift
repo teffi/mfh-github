@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct UserView: View {
+struct UserProfileView: View {
     
-    @StateObject private var viewModel: UserViewModel
+    @StateObject private var viewModel: UserProfileViewModel
         
     init(
         user: UserProfile,
@@ -17,7 +17,7 @@ struct UserView: View {
         routerService: RouterService
         
     ) {
-        _viewModel = StateObject(wrappedValue: UserViewModel(user: user, repositoryService: repositoryService, routerService: routerService))
+        _viewModel = StateObject(wrappedValue: UserProfileViewModel(user: user, repositoryService: repositoryService, routerService: routerService))
     }
     
     @ViewBuilder

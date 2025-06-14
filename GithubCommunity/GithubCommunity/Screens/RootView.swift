@@ -19,7 +19,7 @@ struct RootView: View {
                     case .repo(let restUrl):
                         RepoView()
                     case .userProfile(let profile):
-                        UserView(user: profile, repositoryService: RepositoryService(), routerService: router)
+                        UserProfileView(user: profile, repositoryService: RepositoryService(), routerService: router)
                     case .users:
                         UsersView(repositoryService: RepositoryService(), routerService: router)
                     }

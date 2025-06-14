@@ -20,7 +20,7 @@ struct Repository: Identifiable, Decodable {
 }
 
 @MainActor
-class UserViewModel: ObservableObject {
+class UserProfileViewModel: ObservableObject {
     private let repositoryService: RepositoryServiceProtocol
     private let routerService: RouterService
     @Published var user: UserProfile
@@ -55,7 +55,7 @@ class UserViewModel: ObservableObject {
         Task {
             do {
                 let result = try await repositoryService.getRepositories(link: user.reposUrl)
-                repos = showForkedRepos ? result : result.filter { !$0.fork }                
+                repos = showForkedRepos ? result : result.filter { !$0.fork }
             } catch {
                 print("Error fetching repositories: \(error)")
             }

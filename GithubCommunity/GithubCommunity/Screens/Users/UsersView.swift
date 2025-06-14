@@ -53,34 +53,3 @@ struct UsersView: View {
 //#Preview {
 //    ContentView()
 //}
-
-
-//Button{
-//    //viewModel.goToUser()
-//} label: {
-//
-//    HStack(spacing: 14) {
-//        AsyncImage(url: URL(string: user.avatarUrl)) { image in
-//            image
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//        } placeholder: {
-//            Image(systemName: "photo.fill")
-//        }
-//        .frame(width: 80, height: 80)
-//        .clipShape(Circle())
-//        Text(user.login)
-//        Text(user.name)
-//    }
-//}
-//.matchedGeometryEffect(id: user.id, in: animation)
-//.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-//.onTapGesture {
-//    print("tap tap tap")
-//    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-//        
-//    }
-//}
-//.padding(.horizontal, 12)
-//.padding(.vertical, 20)
-//.card()

@@ -12,13 +12,13 @@ enum APIMethod: String {
 
 protocol APIServiceProtocol {
     var session: URLSession { get }
-    func sendRequest<T: Decodable>(url: URL, method: APIMethod, body: Data?, queries: [String: String]?) async -> Result<T, Error>
+    func sendRequest<T: Decodable>(url: URL, method: APIMethod, body: Data?, queries: [String: String]?) async throws -> T
 }
 
 class APIService: APIServiceProtocol {
     var session: URLSession = .shared
     
-    func sendRequest<T: Decodable>(url: URL, method: APIMethod, body: Data? = nil, queries: [String: String]? = nil) async -> Result<T, Error> {
+    func sendRequest<T: Decodable>(url: URL, method: APIMethod, body: Data? = nil, queries: [String: String]? = nil) async throws -> T {
         // Compose request via url components
         var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)!
         urlComponents.queryItems = queries?.map { key, value in
@@ -26,7 +26,7 @@ class APIService: APIServiceProtocol {
         }
         //  Make sure url is valid
         guard let url = urlComponents.url else {
-            return .failure(URLError(.badURL))
+            throw URLError(.badURL)
         }
         
         var request = URLRequest(url: url)
@@ -41,18 +41,15 @@ class APIService: APIServiceProtocol {
 //        ]
 //        request.httpBody = try body()?
         
-        do {
-            let (data, response) = try await session.data(for: request)
-            // TODO: Remove this later. For response checking only
-            data.prettyPrint()
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let decodedResponse = try decoder.decode(T.self, from: data)
-            return .success(decodedResponse)
-        } catch {
-            print("Error info: \(error)")
-            return .failure(error)
-        }
+        let (data, response) = try await session.data(for: request)
+        
+        // TODO: Remove this later. For response checking only
+        data.prettyPrint()
+        
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        return try decoder.decode(T.self, from: data)
     
     }
 }

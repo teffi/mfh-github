@@ -12,10 +12,7 @@ struct GitHubCommunityApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                UsersView()
-            }
-            
+            RootView()            
         }
     }
 }

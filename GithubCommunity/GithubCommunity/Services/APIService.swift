@@ -43,12 +43,11 @@ class APIService: APIServiceProtocol {
         
         do {
             let (data, response) = try await session.data(for: request)
-            
-            // For response checking only
+            // TODO: Remove this later. For response checking only
             data.prettyPrint()
-            
-            let decodedResponse = try JSONDecoder().decode(T.self, from: data)
-            
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let decodedResponse = try decoder.decode(T.self, from: data)
             return .success(decodedResponse)
         } catch {
             print("Error info: \(error)")

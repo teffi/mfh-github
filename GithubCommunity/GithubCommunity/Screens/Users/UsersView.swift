@@ -9,18 +9,44 @@ import SwiftUI
 import Combine
 
 struct UsersView: View {
-    @StateObject var viewModel = UsersViewModel(repositoryService: RepositoryService())
+    @EnvironmentObject private var router: RouterService
     
+    @StateObject var viewModel: UsersViewModel
+    
+    
+    init(repositoryService: RepositoryService, routerService: RouterService) {
+        _viewModel = StateObject(wrappedValue: UsersViewModel(repositoryService: repositoryService, routerService: routerService))
+    }
     
     var body: some View {
         ZStack {
             VStack {
                 ScrollView {
-                    LazyVStack(spacing: 32) {
+                    LazyVStack(alignment: .leading, spacing: 24) {
                         ForEach(viewModel.users) { user in
-                            Text(user.login)
+                            Button{
+                                viewModel.goToUser()
+                            } label: {
+                                HStack(spacing: 14) {
+                                    AsyncImage(url: URL(string: user.avatarUrl)) { image in
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                    } placeholder: {
+                                        Image(systemName: "photo.fill")
+                                    }
+                                    .frame(width: 80, height: 80)
+                                    .clipShape(Circle())
+                                    Text(user.login)
+                                }
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 20)
+                            .card()
                         }
                     }
+                    .padding(.horizontal, 24)
                 }
             }
             if viewModel.isLoading {

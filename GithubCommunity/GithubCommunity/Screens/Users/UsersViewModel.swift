@@ -11,6 +11,9 @@ import Foundation
 struct User: Identifiable, Decodable {
     let id: Int
     let login: String
+    let avatarUrl: String
+    let url: String
+    let reposUrl: String
 }
 
 class UsersViewModel: ObservableObject {
@@ -18,9 +21,11 @@ class UsersViewModel: ObservableObject {
     @Published private(set) var isLoading = false
     
     private let repositoryService: RepositoryServiceProtocol
+    private let routerService: RouterService
     
-    init(repositoryService: RepositoryServiceProtocol = RepositoryService()) {
+    init(repositoryService: RepositoryServiceProtocol = RepositoryService(), routerService: RouterService) {
         self.repositoryService = repositoryService
+        self.routerService = routerService
     }
     
     func viewAppeared() {
@@ -40,5 +45,10 @@ class UsersViewModel: ObservableObject {
                 // TODO: Trigger of error state
             }
         }
+    }
+    
+    func goToUser() {
+        print("go to user")
+        routerService.to(route: .user(restUrl: "sample link"))
     }
 }

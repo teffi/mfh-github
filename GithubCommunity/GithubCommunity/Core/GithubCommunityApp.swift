@@ -16,8 +16,3 @@ struct GitHubCommunityApp: App {
         }
     }
 }
-
-
-extension EnvironmentValues {
-  @Entry var apiService = APIService()
-}

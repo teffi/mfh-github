@@ -15,11 +15,48 @@ struct UserProfileView: View {
         user: UserProfile,
         repositoryService: RepositoryServiceProtocol,
         routerService: RouterService
-        
     ) {
         _viewModel = StateObject(wrappedValue: UserProfileViewModel(user: user, repositoryService: repositoryService, routerService: routerService))
     }
     
+    var body: some View {
+        VStack {
+            ScrollView {
+                LazyVStack {
+                    userInfoView
+                    repositoryHeaderView
+                        .padding(.vertical, 20)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                    // Repositories
+                    VStack(alignment: .leading, spacing: 20) {
+                        ForEach(viewModel.repos) { repo in
+                            repositoryItemView(repo)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    viewModel.goToRepo(url: repo.htmlUrl)
+                                }
+                        }
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                    
+                    if viewModel.isLoading {
+                        ZStack {
+                           placeholdersView
+                        }
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 10)
+            }
+           
+        }
+        .onAppear {
+            viewModel.viewAppeared()
+        }
+    }
+}
+
+extension UserProfileView {
     @ViewBuilder
     var placeholdersView: some View {
         VStack(spacing: 24) {
@@ -63,15 +100,11 @@ struct UserProfileView: View {
                     .bold()
                 Text("@\(viewModel.user.login)")
                     .font(.title3)
-//                    .background(.gray.opacity(0.1), in: .circle)
-                
                 HStack(spacing: 16){
                     Label("\(viewModel.user.followers) followers", systemImage: "person.2")
                     Label("\(viewModel.user.following) following", systemImage: "person.2.wave.2")
-//                        .font(.caption2)
                 }
                 .font(.subheadline)
-
             }.frame(maxWidth: .infinity)
         }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
     }
@@ -84,8 +117,7 @@ struct UserProfileView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(minWidth: 0, maxWidth: 30, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-                    
-                    
+                                        
                 VStack (alignment: .leading, spacing: 6) {
                     Text(repo.name)
                         .font(.headline)
@@ -123,48 +155,6 @@ struct UserProfileView: View {
                 }
             }
         }
-        
         Divider()
     }
-        
-    var body: some View {
-        ZStack(alignment: .bottom) {
-
-            
-            VStack {
-                ScrollView {
-                    LazyVStack {
-                        userInfoView
-                        repositoryHeaderView
-                            .padding(.vertical, 20)
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-                        // Repositories
-                        VStack(alignment: .leading, spacing: 20) {
-                            ForEach(viewModel.repos) { repo in
-                                repositoryItemView(repo)
-                                    .contentShape(Rectangle())
-                                    .onTapGesture {
-                                        viewModel.goToRepo(url: repo.htmlUrl)
-                                    }
-                            }
-                        }
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-                        
-                        if viewModel.isLoading {
-                            ZStack {
-                               placeholdersView
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 10)
-                }
-               
-            }
-        }
-        .onAppear {
-            viewModel.viewAppeared()
-        }
-    }
 }
-

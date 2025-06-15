@@ -5,7 +5,7 @@ Take a peek at the GitHub Community and their repositories.
 ## Running instructions
 Requirement: **Github Personal Access Token**. Please generate your own *fine-grained personal access tokens* 
  
-To run the app in Xcode, open the the project and replace the token in `RootView.swift`
+🚨 **IMPORTANT: To run the app in Xcode, open the the project and replace the token in `RootView.swift`**
 
 ```
     // RootView.swift

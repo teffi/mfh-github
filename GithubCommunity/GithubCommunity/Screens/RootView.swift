@@ -35,6 +35,5 @@ struct RootView: View {
             }
         }
         .tint(.black)
-        .environmentObject(router)
     }
 }

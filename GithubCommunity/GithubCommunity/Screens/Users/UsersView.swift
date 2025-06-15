@@ -38,10 +38,17 @@ struct UsersView: View {
                                     viewModel.goToUser(user: user)
                                 }
                         }
+                        
                         if viewModel.isLoading {
                             ZStack { placeholderCardsView }
+                        } else if viewModel.isError {
+                            VStack {
+                                emptyStateView(text: "Oops!\nSomething went wrong while fetching the data.\n\nPlease update the app's Github access token.")
+                            }.frame(height: 400)
                         } else if viewModel.showNoResults {
-                            VStack { noFilterResultView }
+                            VStack {
+                                emptyStateView(text: "Oops!\nWe can't find a match with that username.")
+                            }
                                 .frame(height: 400)
                         }
                     }
@@ -120,8 +127,9 @@ extension UsersView {
         }
     }
     
-    @ViewBuilder var noFilterResultView: some View {        
-        Text("Oops!\nWe can't find a match with that username.")
+    @ViewBuilder
+    func emptyStateView(text: String) -> some View {
+        Text(text)
             .font(.title2)
             .foregroundStyle(.gray)
             .multilineTextAlignment(.center)

@@ -38,6 +38,7 @@ class UsersViewModel: ObservableObject {
     @Published var searchQuery = ""
     @Published private(set) var isLoading = false
     @Published private(set) var showNoResults = false
+    @Published private(set) var isError = false
     private var cancellables = Set<AnyCancellable>()
     private let repositoryService: RepositoryServiceProtocol
     private let routerService: RouterService
@@ -58,6 +59,7 @@ class UsersViewModel: ObservableObject {
             .dropFirst() // drop first assignment on init ([])
             .sink { [weak self] profiles in
                 self?.users = profiles
+                self?.isError = false
             }
             .store(in: &cancellables)
         
@@ -105,6 +107,7 @@ class UsersViewModel: ObservableObject {
                 }
             } catch {
                 print(error)
+                isError = true
             }
         }
     }

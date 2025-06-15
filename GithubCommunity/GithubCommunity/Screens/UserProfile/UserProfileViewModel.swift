@@ -20,7 +20,7 @@ struct Repository: Identifiable, Decodable {
     let htmlUrl: String
 }
 
-@MainActor
+
 class UserProfileViewModel: ObservableObject {
     private let repositoryService: RepositoryServiceProtocol
     private let routerService: RouterService
@@ -54,7 +54,7 @@ class UserProfileViewModel: ObservableObject {
     }
     
     func getRepositories() {
-        Task {
+        Task { @MainActor in
             isLoading = true
             defer { isLoading = false }
             

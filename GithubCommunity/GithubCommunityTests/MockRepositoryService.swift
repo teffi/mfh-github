@@ -16,8 +16,15 @@ class MockRepositoryService: RepositoryServiceProtocol {
         Self.getUsersCallCount = 0
     }
     
-    func getUsers() async -> Result<[User], Error> {
-        Self.getUsersCallCount += 1
-        return .success([User(id: 1, login: "")])
+    func getUsers() async throws -> [GitHubCommunity.User] {
+        return [User(id: 1, login: "test", avatarUrl: "test", url: "test", reposUrl: "test")]
+    }
+    
+    func getUser(link: String) async throws -> GitHubCommunity.UserProfile {
+        return UserProfile(id: 1, name: "test", blog: "test", login: "test", avatarUrl: "test", company: "test", location: "test", reposUrl: "test", followers: 1, following: 1)
+    }
+    
+    func getRepositories(link: String) async throws -> [GitHubCommunity.Repository] {
+        return [Repository(id: 1, name: "test", fullName: "test", description: "test", stargazersCount: 1, language: "test", url: "test", fork: false, htmlUrl: "test")]
     }
 }

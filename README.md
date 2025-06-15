@@ -7,6 +7,8 @@ https://github.com/user-attachments/assets/7128351b-79ca-4643-af11-e22e3eabba87
 
 ## Running instructions
 Requirement: **Github Personal Access Token**. Please generate your own *fine-grained personal access tokens* 
+
+
 **🚨IMPORTANT: 
 To run the app in Xcode, open the the project and replace the token in `RootView.swift`**
 

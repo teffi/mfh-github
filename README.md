@@ -2,16 +2,15 @@
 Take a peek at the GitHub Community and their repositories.
 
 
-
 https://github.com/user-attachments/assets/7128351b-79ca-4643-af11-e22e3eabba87
 
 
-
 ## Running instructions
-
 Requirement: **Github Personal Access Token**. Please generate your own *fine-grained personal access tokens* 
- 
-**🚨IMPORTANT: To run the app in Xcode, open the the project and replace the token in `RootView.swift`**
+**🚨IMPORTANT: 
+To run the app in Xcode, open the the project and replace the token in `RootView.swift`**
+
+Please generate your own *fine-grained personal access tokens* 
 
 ```
     // RootView.swift
@@ -54,7 +53,7 @@ class APIService {
 
 
 ### UI/UX
-- To achieve a richer ui on the first screen, I used two endpoints retrieved both users list and each user's data.
+- To achieve a richer ui on the first screen, I used two(2) endpoints (1) users list and (2) each user's data.
 
   
 

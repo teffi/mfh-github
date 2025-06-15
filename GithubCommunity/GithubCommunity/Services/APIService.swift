@@ -45,10 +45,6 @@ class APIService: APIServiceProtocol {
         
         let (data, response) = try await session.data(for: request)
         
-        // TODO: Remove this later. For response checking only
-        data.prettyPrint()
-        print((response as? HTTPURLResponse)?.allHeaderFields)
-        
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         

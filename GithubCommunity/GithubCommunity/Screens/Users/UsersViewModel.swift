@@ -18,9 +18,11 @@ struct User: Identifiable, Decodable {
 
 struct UserProfile: Identifiable, Decodable, Hashable {
     let id: Int
-    let name: String
+    let name: String?
+    let blog: String?
     let login: String
     let avatarUrl: String
+    let company: String?
     let location: String?
     let reposUrl: String
     let followers: Int
@@ -36,7 +38,7 @@ class UsersViewModel: ObservableObject {
     private let repositoryService: RepositoryServiceProtocol
     let routerService: RouterService
     
-    init(repositoryService: RepositoryServiceProtocol = RepositoryService(), routerService: RouterService) {
+    init(repositoryService: RepositoryServiceProtocol, routerService: RouterService) {
         self.repositoryService = repositoryService
         self.routerService = routerService
     }

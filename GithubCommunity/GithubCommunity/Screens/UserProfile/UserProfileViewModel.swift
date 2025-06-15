@@ -17,6 +17,7 @@ struct Repository: Identifiable, Decodable {
     let language: String?
     let url: String
     let fork: Bool
+    let htmlUrl: String
 }
 
 @MainActor
@@ -26,11 +27,12 @@ class UserProfileViewModel: ObservableObject {
     @Published var user: UserProfile
     @Published var repos: [Repository] = []
     @Published var showForkedRepos = false
+    @Published private(set) var isLoading = false
     private var cancellables = Set<AnyCancellable>()
     
     init(
         user: UserProfile,
-        repositoryService: RepositoryServiceProtocol = RepositoryService(),
+        repositoryService: RepositoryServiceProtocol,
         routerService: RouterService
     ) {
         self.user = user
@@ -53,6 +55,9 @@ class UserProfileViewModel: ObservableObject {
     
     func getRepositories() {
         Task {
+            isLoading = true
+            defer { isLoading = false }
+            
             do {
                 let result = try await repositoryService.getRepositories(link: user.reposUrl)
                 repos = showForkedRepos ? result : result.filter { !$0.fork }
@@ -60,5 +65,11 @@ class UserProfileViewModel: ObservableObject {
                 print("Error fetching repositories: \(error)")
             }
         }
+    }    
+    
+    func goToRepo(url: String) {
+        guard let url = URL(string: url) else { return }
+        routerService.to(route: .repo(url: url))
     }
+    
 }

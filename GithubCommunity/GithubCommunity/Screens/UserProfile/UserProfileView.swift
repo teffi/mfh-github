@@ -13,11 +13,25 @@ struct UserProfileView: View {
         
     init(
         user: UserProfile,
-        repositoryService: RepositoryServiceProtocol = RepositoryService(),
+        repositoryService: RepositoryServiceProtocol,
         routerService: RouterService
         
     ) {
         _viewModel = StateObject(wrappedValue: UserProfileViewModel(user: user, repositoryService: repositoryService, routerService: routerService))
+    }
+    
+    @ViewBuilder
+    var placeholdersView: some View {
+        VStack(spacing: 24) {
+            ForEach(0...6,  id: \.self) { _ in
+                VStack(alignment: .leading, spacing: 10){
+                    Color(.systemGray5)
+                        .frame(maxWidth: .infinity, minHeight: 14, maxHeight: 14)
+                    Color(.systemGray5)
+                        .frame(maxWidth: 200, minHeight: 14, maxHeight: 14)
+                }
+            }
+        }
     }
     
     @ViewBuilder
@@ -32,9 +46,9 @@ struct UserProfileView: View {
                     .padding(3)
                     .background(.gray.opacity(0.1), in: .circle)
             }
-            Toggle("Forked", isOn: $viewModel.showForkedRepos)
-                .font(.subheadline)
-                .padding(.bottom, 20)
+            Toggle("Include forks", isOn: $viewModel.showForkedRepos)
+                .toggleStyle(CheckboxToggleStyle())
+                .padding(.bottom, 12)
         }
     }
     
@@ -44,16 +58,20 @@ struct UserProfileView: View {
             AvatarView(url: URL(string: viewModel.user.avatarUrl)!)
                 .frame(width: 120, height: 120)
             VStack(alignment: .center, spacing: 8){
-                Text(viewModel.user.name)
+                Text(viewModel.user.name ?? "_")
                     .font(.title2)
                     .bold()
                 Text("@\(viewModel.user.login)")
                     .font(.title3)
-                HStack {
-                    Image(systemName: "person.2")
-                    Text("\(viewModel.user.followers) followers")
-                        .font(.subheadline)
+//                    .background(.gray.opacity(0.1), in: .circle)
+                
+                HStack(spacing: 16){
+                    Label("\(viewModel.user.followers) followers", systemImage: "person.2")
+                    Label("\(viewModel.user.following) following", systemImage: "person.2.wave.2")
+//                        .font(.caption2)
                 }
+                .font(.subheadline)
+
             }.frame(maxWidth: .infinity)
         }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
     }
@@ -79,7 +97,6 @@ struct UserProfileView: View {
             
             Text(repo.description ?? "No description.")
                 .font(.subheadline)
-            
             
             HStack {
                 if let lang = repo.language {
@@ -112,25 +129,37 @@ struct UserProfileView: View {
         
     var body: some View {
         ZStack(alignment: .bottom) {
+
+            
             VStack {
                 ScrollView {
-                    VStack {
+                    LazyVStack {
                         userInfoView
                         repositoryHeaderView
                             .padding(.vertical, 20)
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
                         // Repositories
-                        VStack(alignment: .leading, spacing: 24) {
+                        VStack(alignment: .leading, spacing: 20) {
                             ForEach(viewModel.repos) { repo in
                                 repositoryItemView(repo)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        viewModel.goToRepo(url: repo.htmlUrl)
+                                    }
                             }
                         }
-                        .padding(.horizontal, 12)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                        
+                        if viewModel.isLoading {
+                            ZStack {
+                               placeholdersView
+                            }
+                        }
                     }
-                    .padding(.horizontal, 12)
+                    .padding(.horizontal, 20)
                     .padding(.vertical, 10)
                 }
+               
             }
         }
         .onAppear {
@@ -138,3 +167,4 @@ struct UserProfileView: View {
         }
     }
 }
+

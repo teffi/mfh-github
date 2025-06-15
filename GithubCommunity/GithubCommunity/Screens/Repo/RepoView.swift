@@ -6,8 +6,12 @@
 //
 import SwiftUI
 
-struct RepoView: View {
+struct RepoView: View {    
+    let url: URL
+    
     var body: some View {
-        Text("Hello, World!")
+        VStack {
+            WKWebViewUI(url: url)
+        }                
     }
 }

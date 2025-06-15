@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "github_community_banner.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

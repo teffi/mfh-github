@@ -15,18 +15,22 @@ protocol RepositoryServiceProtocol {
 }
 
 class RepositoryService: RepositoryServiceProtocol {
-    var apiService: APIServiceProtocol = APIService()
+    let apiService: APIServiceProtocol
+    
+    init(apiService: APIServiceProtocol) {
+        self.apiService = apiService
+    }
     
     func getUsers() async throws -> [User] {
-        return try await APIService().sendRequest(url: URL(string: "https://api.github.com/users")!, method: .get, queries: ["per_page": "6"])
+        return try await apiService.sendRequest(url: URL(string: "https://api.github.com/users")!, method: .get, body: nil, queries: nil)
     }
     
     func getUser(link: String) async throws -> UserProfile {
-        return try await APIService().sendRequest(url: URL(string: link)!, method: .get)
+        return try await apiService.sendRequest(url: URL(string: link)!, method: .get, body: nil, queries: nil)
     }
     
     func getRepositories(link: String) async throws -> [Repository] {
-        return try await APIService().sendRequest(url: URL(string: link)!, method: .get)
+        return try await apiService.sendRequest(url: URL(string: link)!, method: .get, body: nil, queries: nil)
     }
 }
 

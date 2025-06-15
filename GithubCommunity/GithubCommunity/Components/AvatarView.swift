@@ -15,7 +15,7 @@ struct AvatarView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
         } placeholder: {
-            Image(systemName: "photo.fill")
+            Color(.systemGray5)
         }     
         .clipShape(Circle())
     }

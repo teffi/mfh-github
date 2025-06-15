@@ -17,6 +17,11 @@ protocol APIServiceProtocol {
 
 class APIService: APIServiceProtocol {
     var session: URLSession = .shared
+    private let authToken: String?
+    
+    init(token: String? = nil) {
+        self.authToken = token
+    }
     
     func sendRequest<T: Decodable>(url: URL, method: APIMethod, body: Data? = nil, queries: [String: String]? = nil) async throws -> T {
         // Compose request via url components
@@ -31,20 +36,22 @@ class APIService: APIServiceProtocol {
         
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
-        request.allHTTPHeaderFields = [
-            "Content-Type" : "application/vnd.github+json"
-        ]        
         request.httpBody = body
+        request.addValue("application/vnd.github+json", forHTTPHeaderField: "Content-Type")
+        
+        if let token = authToken {
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         
         let (data, response) = try await session.data(for: request)
         
         // TODO: Remove this later. For response checking only
         data.prettyPrint()
+        print((response as? HTTPURLResponse)?.allHeaderFields)
         
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         return try decoder.decode(T.self, from: data)
-    
     }
 }
